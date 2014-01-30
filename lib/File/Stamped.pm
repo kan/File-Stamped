@@ -243,8 +243,6 @@ generate symlink file for log file.
 
 This method prints the $str to the file.
 
-=back
-
 =item $fh->syswrite($str: Str)
 
 This method prints the $str to the file.
