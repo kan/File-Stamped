@@ -144,8 +144,16 @@ sub syswrite {
             open $fh, *$self->{iomode}, $fname or die "Cannot open file($fname): $!";
             $self->_gen_symlink($fname);
         }
-        syswrite($fh, $buf, $len, $offset)
-            or die "Cannot write to $fname: $!";
+        if ($len && $offset) {
+            syswrite($fh, $buf, $len, $offset)
+                or die "Cannot write to $fname: $!";
+        } elsif ($len) {
+            syswrite($fh, $buf, $len)
+                or die "Cannot write to $fname: $!";
+        } else {
+            syswrite($fh, $buf)
+                or die "Cannot write to $fname: $!";
+        }
 
         $fh;
     });
