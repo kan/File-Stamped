@@ -250,6 +250,8 @@ This method prints the $str to the file.
 This method prints the $str to the file.
 This method uses syswrite internally. Writing is not buffered.
 
+=back
+
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ gmail.comE<gt>
