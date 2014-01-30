@@ -136,7 +136,7 @@ sub print {
 sub syswrite {
     my $self = shift;
 
-    my @args = @_;
+    my($buf, $len, $offset) = @_;
 
     $self->_output(sub {
         my ($fh, $fname) = @_;
@@ -144,7 +144,7 @@ sub syswrite {
             open $fh, *$self->{iomode}, $fname or die "Cannot open file($fname): $!";
             $self->_gen_symlink($fname);
         }
-        syswrite($fh, @args)
+        syswrite($fh, $buf, $len, $offset)
             or die "Cannot write to $fname: $!";
 
         $fh;
