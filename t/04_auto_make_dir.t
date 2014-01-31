@@ -17,6 +17,7 @@ my $fname = do {
     my $fname;
     opendir my $dh, $dir or die;
     LOOP: while (my $e = readdir $dh) {
+        next if $e eq '.' || $e eq '..';
         $e = File::Spec->catfile($dir, $e);
         if (-d $e) {
             opendir my $cdh, $e or die;
