@@ -136,7 +136,7 @@ sub print {
 sub syswrite {
     my $self = shift;
 
-    my($buf, $len, $offset) = @_;
+    my ($buf, @args) = @_;
 
     $self->_output(sub {
         my ($fh, $fname) = @_;
@@ -144,16 +144,11 @@ sub syswrite {
             open $fh, *$self->{iomode}, $fname or die "Cannot open file($fname): $!";
             $self->_gen_symlink($fname);
         }
-        if ($len && $offset) {
-            syswrite($fh, $buf, $len, $offset)
-                or die "Cannot write to $fname: $!";
-        } elsif ($len) {
-            syswrite($fh, $buf, $len)
-                or die "Cannot write to $fname: $!";
-        } else {
-            syswrite($fh, $buf)
-                or die "Cannot write to $fname: $!";
-        }
+        my $res = @args == 0 ? CORE::syswrite($fh, $buf)
+                : @args == 1 ? CORE::syswrite($fh, $buf, $args[0])
+                : @args == 2 ? CORE::syswrite($fh, $buf, $args[0], $args[1])
+                : Carp::croak 'Too many arguments for syswrite';
+        die "Cannot write to $fname: $!" unless $res;
 
         $fh;
     });

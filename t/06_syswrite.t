@@ -12,6 +12,8 @@ my $pattern = File::Spec->catdir($dir, 'foo.%Y%m%d.log');
 my $f = File::Stamped->new(pattern => $pattern);
 $f->syswrite("OK\n");
 syswrite $f, "OK2\n";
+syswrite $f, "OK3\nfoo", 4;
+syswrite $f, "barOK4\nfoo", 4, 3;
 
 my $fname = do {
     my $fname;
@@ -30,7 +32,7 @@ my $fname = do {
 like basename($fname), qr{^foo.\d{8,}\.log$};
 open my $fh, '<', $fname or die;
 my $content = do { local $/; <$fh> };
-is $content, "OK\nOK2\n";
+is $content, "OK\nOK2\nOK3\nOK4\n";
 
 done_testing;
 
